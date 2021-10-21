@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Barracuda URL decoder</title>
+        <script>
+            "use strict";
+
+            function bdec() {
+                let src = document.getElementById("url").value;
+                let out = document.getElementById("result");
+
+                let srcUrl;
+
+                try {
+                    srcUrl = new URL(src);
+                } catch {
+                    out.value = "Unable to parse URL";
+                    return;
+                }
+
+                let dst;
+
+                try {
+                    dst = srcUrl.searchParams.get("a");
+                } catch {
+                    out.value = "Unable to find parameter 'a' in URL";
+                    return;
+                }
+
+                out.value = dst;
+            }
+
+            function cp() {
+                document.getElementById("result").select();
+                document.execCommand("copy");
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById("url").addEventListener("change", bdec);
+                document.getElementById("url").addEventListener("keyup", bdec);
+                document.getElementById("copy").addEventListener("click", cp);
+            });
+        </script>
+        <style type="text/css">
+            body {
+                display: grid;
+                grid-template-columns: max-content max-content;
+                column-gap: 1rem;
+                row-gap: 0.25rem;
+            }
+
+            label:after {
+                content: ":";
+            }
+
+            input#result {
+                color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <label for="url">URL</label> <input name="url" id="url" size="100"/>
+        <label for="result">Result</label> <input name="result" id="result" size="100" readonly="readonly"/>
+        <button id="copy">copy result</button>
+    </body>
+</html>
