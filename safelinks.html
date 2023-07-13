@@ -43,7 +43,7 @@
             });
         </script>
         <style type="text/css">
-            body {
+            div.grid-container {
                 display: grid;
                 grid-template-columns: max-content max-content;
                 column-gap: 1rem;
@@ -60,9 +60,11 @@
         </style>
     </head>
     <body>
-        <label for="url">URL</label> <input name="url" id="url" size="100"/>
-        <label for="result">Result</label> <input name="result" id="result" size="100" readonly="readonly"/>
-        <button id="copy">copy result</button>
+        <div class="grid-container">
+            <label for="url">URL</label> <input name="url" id="url" size="100"/>
+            <label for="result">Result</label> <input name="result" id="result" size="100" readonly="readonly"/>
+            <button id="copy">copy result</button>
+        </div>
         <p>Other tools: <a href=".">Barracuda decoder</a></p>
     </body>
 </html>
