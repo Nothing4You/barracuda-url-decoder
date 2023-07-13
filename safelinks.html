@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Barracuda URL decoder</title>
+        <title>Safe Links URL decoder</title>
         <script>
             "use strict";
 
@@ -22,9 +22,9 @@
                 let dst;
 
                 try {
-                    dst = srcUrl.searchParams.get("a");
+                    dst = srcUrl.searchParams.get("url");
                 } catch {
-                    out.value = "Unable to find parameter 'a' in URL";
+                    out.value = "Unable to find parameter 'url' in URL";
                     return;
                 }
 
@@ -63,6 +63,6 @@
         <label for="url">URL</label> <input name="url" id="url" size="100"/>
         <label for="result">Result</label> <input name="result" id="result" size="100" readonly="readonly"/>
         <button id="copy">copy result</button>
-        <p>Other tools: <a href="safelinks.html">Safe Links decoder</a></p>
+        <p>Other tools: <a href=".">Barracuda decoder</a></p>
     </body>
 </html>
