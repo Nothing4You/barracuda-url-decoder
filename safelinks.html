@@ -6,9 +6,29 @@
         <script>
             "use strict";
 
-            function bdec() {
-                let src = document.getElementById("url").value;
-                let out = document.getElementById("result");
+            function decode_azure_email_redirect(url) {
+                let srcUrl;
+                if (typeof url === "string") {
+                    srcUrl = new URL(url);
+                } else {
+                    srcUrl = url;
+                }
+
+                if (srcUrl.host === "emails.azure.microsoft.com" && srcUrl.pathname === "/redirect/") {
+                    return srcUrl.searchParams.get("destination");
+                }
+
+                return null;
+            }
+
+            function dec() {
+                const src = document.getElementById("url").value.trim();
+                const out = document.getElementById("result");
+
+                if (src.length === 0) {
+                    out.value = "";
+                    return;
+                }
 
                 let srcUrl;
 
@@ -19,13 +39,26 @@
                     return;
                 }
 
-                let dst;
+                // shortcut if URL is already an Azure email URL, don't attempt SafeLinks decode in this case
+                if (document.getElementById("azure-emails").checked) {
+                    const azure = decode_azure_email_redirect(srcUrl);
+                    if (azure !== null) {
+                        out.value = azure;
+                        return;
+                    }
+                }
 
-                try {
-                    dst = srcUrl.searchParams.get("url");
-                } catch {
+                let dst = srcUrl.searchParams.get("url");
+                if (dst === null) {
                     out.value = "Unable to find parameter 'url' in URL";
                     return;
+                }
+
+                if (document.getElementById("azure-emails").checked) {
+                    const azure = decode_azure_email_redirect(dst);
+                    if (azure !== null) {
+                        dst = azure;
+                    }
                 }
 
                 out.value = dst;
@@ -37,8 +70,9 @@
             }
 
             document.addEventListener("DOMContentLoaded", () => {
-                document.getElementById("url").addEventListener("change", bdec);
-                document.getElementById("url").addEventListener("keyup", bdec);
+                document.getElementById("url").addEventListener("change", dec);
+                document.getElementById("url").addEventListener("keyup", dec);
+                document.getElementById("azure-emails").addEventListener("change", dec);
                 document.getElementById("copy").addEventListener("click", cp);
             });
         </script>
@@ -64,6 +98,10 @@
             <label for="url">URL</label> <input name="url" id="url" size="100"/>
             <label for="result">Result</label> <input name="result" id="result" size="100" readonly="readonly"/>
             <button id="copy">copy result</button>
+        </div>
+        <h4>Decoder options</h4>
+        <div class=grid-container>
+            <label for="azure-emails">Decode emails.azure.microsoft.com</label> <input name="azure-emails" id="azure-emails" type="checkbox" checked="checked"/>
         </div>
         <p>Other tools: <a href=".">Barracuda decoder</a></p>
     </body>
