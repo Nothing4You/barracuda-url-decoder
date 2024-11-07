@@ -14,7 +14,7 @@
                     srcUrl = url;
                 }
 
-                if (srcUrl.host === "emails.azure.microsoft.com" && srcUrl.pathname === "/redirect/") {
+                if ((srcUrl.host === "emails.azure.microsoft.com" || srcUrl.host.endsWith(".safelink.emails.azure.net")) && srcUrl.pathname === "/redirect/") {
                     return srcUrl.searchParams.get("destination");
                 }
 
@@ -101,7 +101,7 @@
         </div>
         <h4>Decoder options</h4>
         <div class=grid-container>
-            <label for="azure-emails">Decode emails.azure.microsoft.com</label> <input name="azure-emails" id="azure-emails" type="checkbox" checked="checked"/>
+            <label for="azure-emails">Decode Azure email safelinks as well</label> <input name="azure-emails" id="azure-emails" type="checkbox" checked="checked"/>
         </div>
         <p>Other tools: <a href=".">Barracuda decoder</a></p>
     </body>
